@@ -1,0 +1,41 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// prisma/schema.prisma
+
+model Hostel {
+  id      Int       @id @default(autoincrement())
+  name    String
+  rooms   Room[]
+  Student Student[]
+}
+
+model Room {
+  id        Int       @id @default(autoincrement())
+  number    Int
+  occupants Student[]
+  hostel    Hostel?   @relation(fields: [hostelId], references: [id])
+  hostelId  Int?
+}
+
+model Student {
+  id         Int     @id @default(autoincrement())
+  username   String
+  password   String
+  fullname   String
+  age        Int
+  department String
+  hostel     Hostel? @relation(fields: [hostelId], references: [id])
+  hostelId   Int?
+  Room       Room?   @relation(fields: [roomId], references: [id])
+  roomId     Int?
+}
